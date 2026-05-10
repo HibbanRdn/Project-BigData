@@ -129,3 +129,42 @@ Ditambahkan residual produktivitas, signed percentage error produksi, dan visual
 ### Expected Impact
 
 Error analysis lebih informatif untuk diagnosis model dan diskusi akademik.
+<<<<<<< HEAD
+=======
+
+## Interpretation of Current Results
+
+### Problem
+
+Ringkasan akhir dapat terlihat membingungkan karena `Ridge Regression` diberi label model ML terbaik, sementara `Naive Kab Mean` masih memiliki MAPE lebih rendah pada walk-forward validation dan final test.
+
+### Why It Matters
+
+Secara metodologis, peningkatan kualitas pipeline tidak sama dengan peningkatan akurasi prediktif. Jika baseline historis kabupaten tetap lebih baik, klaim bahwa model ML sudah membaik harus ditolak atau dibatasi.
+
+### Fix Applied
+
+Notebook sekarang membedakan `Model ML Terbaik` dan `Model Overall Terbaik`, menampilkan parameter estimator di dalam `Pipeline`, dan menulis kesimpulan validitas yang eksplisit: pipeline/evaluasi membaik, tetapi akurasi ML belum membaik bila baseline masih unggul.
+
+### Expected Impact
+
+Pembaca tidak lagi salah menafsirkan Ridge sebagai pemenang keseluruhan ketika baseline lebih akurat. Hasil menjadi lebih jujur dan defensible untuk review akademik.
+
+## Model Quality Improvement: Historical Productivity Features
+
+### Problem
+
+Model cuaca + luas panen + OHE kabupaten masih kalah dari baseline lokasi. Ini menunjukkan bahwa sinyal cuaca agregat musiman belum cukup kuat dan model tidak menangkap persistensi produktivitas tahunan per kabupaten.
+
+### Why It Matters
+
+Produktivitas padi tahunan memiliki memori temporal: kualitas lahan, irigasi, praktik budidaya, dan faktor lokal lain cenderung persisten antar tahun. Fitur lag target adalah prediktor kuat yang tetap valid bila hanya menggunakan tahun sebelum periode prediksi.
+
+### Fix Applied
+
+Notebook menambahkan fitur `prodvt_lag1`, `prodvt_roll2`, dan `prodvt_roll3` yang dihitung dari data BPS sebelum tahun prediksi. Eksperimen juga menambahkan `Ridge Hist Lag` dan baseline temporal `Naive Lag1`/`Naive Roll2` agar improvement ML dibandingkan baseline yang lebih kuat dapat diuji secara jujur.
+
+### Expected Impact
+
+Performa ML seharusnya membaik dibanding model cuaca-only/full lama karena model mendapat sinyal historis yang relevan dan hemat fitur. Namun baseline temporal juga menjadi lebih kuat; jika baseline temporal tetap menang, kesimpulan akademik harus menyatakan bahwa persistence model sederhana masih lebih reliable daripada ML kompleks pada dataset kecil ini.
+>>>>>>> 218f132 (Add temporal lag features and baselines)

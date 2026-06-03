@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-06-04T00:11:23",
+  "source": "local pipeline reconstructed from latest notebook Project_BigData-2.ipynb",
+  "n_kabupaten": 15,
+  "tahun_min": 2019,
+  "tahun_max": 2024,
+  "tahun_data_bps_min": 2018,
+  "tahun_data_bps_max": 2024,
+  "n_samples": 90,
+  "n_weather_monthly_rows": 1260,
+  "n_weather_features": 18,
+  "model_ml_terbaik": "Ridge Hist Lag",
+  "model_overall_terbaik_wfv": "Naive Roll2",
+  "baseline_wfv_terbaik": "Naive Roll2",
+  "baseline_final_terbaik": "Naive Lag1",
+  "fitur_final": [
+    "prodvt_lag1",
+    "prodvt_roll2"
+  ],
+  "mape_model_final_2024": 6.257312741100966,
+  "mae_model_final_2024": 0.305409103974972,
+  "rmse_model_final_2024": 0.3906128804470434,
+  "r2_model_final_2024": 0.5643898588656091,
+  "mape_baseline_final_2024": 5.918251431739723,
+  "mape_produksi_2024": 6.257312754186223,
+  "rmse_produksi_2024": 13241.714370378817,
+  "r2_produksi_2024": 0.9945205813154833,
+  "cv_target_pct": 11.825558739352527
+}

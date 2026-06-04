@@ -1,0 +1,6 @@
+Evaluasi,Model,Peran,Jumlah Fitur,RMSE (t/ha),MAE (t/ha),R2,MAPE (%),tahun_test
+WFV fold 2020,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.5327802242890953,0.45262834938903607,0.151372578720127,9.779437109000398,2020
+WFV fold 2021,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.6494911201489763,0.5695969441554596,-0.5697180899319239,10.842886250800046,2021
+WFV fold 2022,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.42439490974004396,0.33900779190434666,0.3062071064017341,6.384832892609363,2022
+WFV fold 2023,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.5116267657466467,0.39640169256671076,0.08300943609687894,7.348994845632613,2023
+WFV fold 2024,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.4134464331896087,0.3278148631774574,0.5119735495659585,6.56141653785062,2024

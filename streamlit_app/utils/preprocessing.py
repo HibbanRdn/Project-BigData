@@ -41,6 +41,39 @@ def predict_productivity(model, prodvt_lag1: float, prodvt_roll2: float) -> floa
     return max(pred, 0.0)
 
 
+def validate_weather_prediction_inputs(values: dict[str, float], feature_metadata: list[dict]) -> list[str]:
+    errors: list[str] = []
+    metadata_by_feature = {item["feature"]: item for item in feature_metadata}
+    for feature, value in values.items():
+        metadata = metadata_by_feature.get(feature, {})
+        label = metadata.get("label", feature)
+        group = metadata.get("group", "")
+        unit = metadata.get("unit", "")
+        if value is None or not np.isfinite(float(value)):
+            errors.append(f"{label} {group} wajib berupa angka yang valid.")
+            continue
+        observed_min = metadata.get("observed_min")
+        observed_max = metadata.get("observed_max")
+        if observed_min is not None and observed_max is not None:
+            margin = max((observed_max - observed_min) * 0.35, 0.1)
+            if value < observed_min - margin or value > observed_max + margin:
+                errors.append(
+                    f"{label} {group} ({value:.2f} {unit}) berada jauh di luar rentang data historis "
+                    f"{observed_min:.2f}-{observed_max:.2f} {unit}."
+                )
+    return errors
+
+
+def predict_weather_productivity(artifact: dict, values: dict[str, float]) -> float:
+    features = artifact["features"]
+    missing = [feature for feature in features if feature not in values]
+    if missing:
+        raise ValueError(f"Input model simulasi cuaca belum lengkap: {missing}")
+    frame = pd.DataFrame([{feature: float(values[feature]) for feature in features}], columns=features)
+    prediction = float(artifact["model"].predict(frame)[0])
+    return max(prediction, 0.0)
+
+
 def estimate_production(productivity_ton_per_ha: float, luas_panen_ha: float | None) -> float | None:
     if luas_panen_ha is None or luas_panen_ha <= 0:
         return None
@@ -59,3 +92,17 @@ def latest_reference_values(df: pd.DataFrame, kabupaten: str) -> dict:
         "luas_panen_ha": float(row["luas_panen_ha"]),
         "produktivitas_aktual": float(row["produktivitas_ton_per_ha"]),
     }
+
+
+def weather_reference_values(reference_df: pd.DataFrame, kabupaten: str, features: list[str]) -> dict:
+    subset = reference_df[reference_df["kabupaten"] == kabupaten]
+    if subset.empty:
+        return {}
+    row = subset.iloc[0]
+    result = {
+        "tahun": int(row["tahun"]),
+        "luas_panen_ha": float(row["luas_panen_ha"]),
+        "produktivitas_aktual": float(row["produktivitas_ton_per_ha"]),
+    }
+    result.update({feature: float(row[feature]) for feature in features})
+    return result

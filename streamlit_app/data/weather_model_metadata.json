@@ -1,0 +1,156 @@
+{
+  "model_name": "Ridge Cuaca + Histori Ringkas",
+  "model_role": "Model simulasi interaktif berbasis cuaca",
+  "features": [
+    "PRECTOTCORR_utama_sum",
+    "T2M_utama_mean",
+    "RH2M_utama_mean",
+    "PRECTOTCORR_gadu_sum",
+    "T2M_gadu_mean",
+    "RH2M_gadu_mean",
+    "PRECTOTCORR_kemarau_sum",
+    "T2M_kemarau_mean",
+    "RH2M_kemarau_mean",
+    "prodvt_lag1",
+    "prodvt_roll2"
+  ],
+  "weather_features": [
+    "PRECTOTCORR_utama_sum",
+    "T2M_utama_mean",
+    "RH2M_utama_mean",
+    "PRECTOTCORR_gadu_sum",
+    "T2M_gadu_mean",
+    "RH2M_gadu_mean",
+    "PRECTOTCORR_kemarau_sum",
+    "T2M_kemarau_mean",
+    "RH2M_kemarau_mean"
+  ],
+  "history_features": [
+    "prodvt_lag1",
+    "prodvt_roll2"
+  ],
+  "target": "produktivitas_ton_per_ha",
+  "ridge_alpha": 30.0,
+  "feature_metadata": [
+    {
+      "feature": "PRECTOTCORR_utama_sum",
+      "label": "Curah hujan",
+      "group": "Musim Utama",
+      "unit": "mm/musim",
+      "step": 10.0,
+      "observed_min": 1065.6,
+      "observed_max": 1750.55,
+      "observed_median": 1265.29
+    },
+    {
+      "feature": "T2M_utama_mean",
+      "label": "Suhu rata-rata",
+      "group": "Musim Utama",
+      "unit": "C",
+      "step": 0.1,
+      "observed_min": 23.68631935483871,
+      "observed_max": 28.196386355209498,
+      "observed_median": 26.37061319985169
+    },
+    {
+      "feature": "RH2M_utama_mean",
+      "label": "Kelembapan rata-rata",
+      "group": "Musim Utama",
+      "unit": "%",
+      "step": 0.5,
+      "observed_min": 80.378970189099,
+      "observed_max": 88.56629600614438,
+      "observed_median": 85.23084347158218
+    },
+    {
+      "feature": "PRECTOTCORR_gadu_sum",
+      "label": "Curah hujan",
+      "group": "Musim Gadu",
+      "unit": "mm/musim",
+      "step": 10.0,
+      "observed_min": 420.48,
+      "observed_max": 1013.76,
+      "observed_median": 632.3399999999999
+    },
+    {
+      "feature": "T2M_gadu_mean",
+      "label": "Suhu rata-rata",
+      "group": "Musim Gadu",
+      "unit": "C",
+      "step": 0.1,
+      "observed_min": 23.964263440860215,
+      "observed_max": 28.22233064516129,
+      "observed_median": 26.282698924731182
+    },
+    {
+      "feature": "RH2M_gadu_mean",
+      "label": "Kelembapan rata-rata",
+      "group": "Musim Gadu",
+      "unit": "%",
+      "step": 0.5,
+      "observed_min": 80.77487634408602,
+      "observed_max": 89.61516397849462,
+      "observed_median": 86.98870564516129
+    },
+    {
+      "feature": "PRECTOTCORR_kemarau_sum",
+      "label": "Curah hujan",
+      "group": "Musim Kemarau",
+      "unit": "mm/musim",
+      "step": 10.0,
+      "observed_min": 52.629999999999995,
+      "observed_max": 755.99,
+      "observed_median": 294.405
+    },
+    {
+      "feature": "T2M_kemarau_mean",
+      "label": "Suhu rata-rata",
+      "group": "Musim Kemarau",
+      "unit": "C",
+      "step": 0.1,
+      "observed_min": 23.85107526881721,
+      "observed_max": 28.41122580645161,
+      "observed_median": 26.57168996415771
+    },
+    {
+      "feature": "RH2M_kemarau_mean",
+      "label": "Kelembapan rata-rata",
+      "group": "Musim Kemarau",
+      "unit": "%",
+      "step": 0.5,
+      "observed_min": 65.9584157706093,
+      "observed_max": 87.76275268817204,
+      "observed_median": 81.52473476702508
+    },
+    {
+      "feature": "prodvt_lag1",
+      "label": "Produktivitas tahun sebelumnya",
+      "group": "Histori Produktivitas",
+      "unit": "ton/ha",
+      "step": 0.01,
+      "observed_min": 3.378757638099917,
+      "observed_max": 6.454420063847472,
+      "observed_median": 5.054040179122304
+    },
+    {
+      "feature": "prodvt_roll2",
+      "label": "Rata-rata produktivitas dua tahun",
+      "group": "Histori Produktivitas",
+      "unit": "ton/ha",
+      "step": 0.01,
+      "observed_min": 3.758905963181553,
+      "observed_max": 6.241231262418576,
+      "observed_median": 5.007515897010449
+    }
+  ],
+  "evaluation": {
+    "wfv_mape": 8.183513527178608,
+    "wfv_rmse": 0.5063478906228741,
+    "wfv_mae": 0.4170899282386021,
+    "wfv_r2": 0.09656891617055494,
+    "final_2024_mape": 6.56141653785062,
+    "final_2024_rmse": 0.4134464331896087,
+    "final_2024_mae": 0.3278148631774574,
+    "final_2024_r2": 0.5119735495659585
+  }
+}

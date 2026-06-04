@@ -1,0 +1,3 @@
+Evaluasi,Model,Peran,Jumlah Fitur,RMSE (t/ha),MAE (t/ha),R2,MAPE (%),MAPE std (%)
+WFV 2020-2024,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.5063478906228741,0.4170899282386021,0.09656891617055494,8.183513527178608,1.7990056953754874
+Final test 2024,Ridge Cuaca + Histori Ringkas,Model simulasi interaktif berbasis cuaca,11,0.4134464331896087,0.3278148631774574,0.5119735495659585,6.56141653785062,

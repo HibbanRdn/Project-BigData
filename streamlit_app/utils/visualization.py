@@ -18,9 +18,11 @@ COLORWAY = [
 CATEGORY_COLORS = {
     "Machine learning": "#34d399",
     "Baseline temporal": "#fbbf24",
+    "Model simulasi cuaca": "#60a5fa",
     "Ridge Hist Lag": "#34d399",
     "Naive Lag1": "#fbbf24",
     "Naive Roll2": "#60a5fa",
+    "Ridge Cuaca + Histori Ringkas": "#60a5fa",
 }
 
 

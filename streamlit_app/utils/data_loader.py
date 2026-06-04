@@ -66,11 +66,42 @@ def load_feature_importance() -> pd.DataFrame:
     return pd.read_csv(DATA_DIR / "feature_importance.csv")
 
 
+@st.cache_data(show_spinner=False)
+def load_weather_model_metadata() -> dict:
+    path = DATA_DIR / "weather_model_metadata.json"
+    if not path.exists():
+        raise FileNotFoundError(f"Metadata model cuaca tidak ditemukan: {path}")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+@st.cache_data(show_spinner=False)
+def load_weather_model_metrics() -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / "weather_model_metrics.csv")
+
+
+@st.cache_data(show_spinner=False)
+def load_weather_model_wfv_folds() -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / "weather_model_wfv_folds.csv")
+
+
+@st.cache_data(show_spinner=False)
+def load_weather_reference_values() -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / "weather_reference_values.csv")
+
+
 @st.cache_resource(show_spinner=False)
 def load_model():
     path = MODEL_DIR / "ridge_hist_lag_model.joblib"
     if not path.exists():
         raise FileNotFoundError(f"Model tidak ditemukan: {path}")
+    return joblib.load(path)
+
+
+@st.cache_resource(show_spinner=False)
+def load_weather_model():
+    path = MODEL_DIR / "weather_interactive_model.joblib"
+    if not path.exists():
+        raise FileNotFoundError(f"Model simulasi cuaca tidak ditemukan: {path}")
     return joblib.load(path)
 
 
@@ -86,6 +117,11 @@ def verify_artifacts() -> list[str]:
         DATA_DIR / "final_2024_metrics.csv",
         DATA_DIR / "prediction_results_2024.csv",
         DATA_DIR / "feature_importance.csv",
+        DATA_DIR / "weather_model_metadata.json",
+        DATA_DIR / "weather_model_metrics.csv",
+        DATA_DIR / "weather_model_wfv_folds.csv",
+        DATA_DIR / "weather_reference_values.csv",
         MODEL_DIR / "ridge_hist_lag_model.joblib",
+        MODEL_DIR / "weather_interactive_model.joblib",
     ]
     return [str(path) for path in required if not path.exists()]

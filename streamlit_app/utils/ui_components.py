@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from html import escape
+from textwrap import dedent
 from typing import Iterable
 
 import streamlit as st
@@ -14,6 +15,15 @@ NAV_ITEMS = [
     ("Coba Model", "sliders2"),
     ("Metodologi dan Batasan", "journal-text"),
 ]
+
+
+def _compact_html(content: str) -> str:
+    """Remove indentation and blank lines that Markdown can treat as code."""
+    return "".join(line.strip() for line in dedent(content).splitlines())
+
+
+def _render_html(content: str, container=st) -> None:
+    container.markdown(_compact_html(content), unsafe_allow_html=True)
 
 
 def apply_theme() -> None:
@@ -202,11 +212,14 @@ def apply_theme() -> None:
 
         .kpi-card {
             min-height: 116px;
+            height: 100%;
+            box-sizing: border-box;
             padding: 1rem;
             border: 1px solid var(--card-border);
             border-radius: 1rem;
             background: linear-gradient(180deg, rgba(19, 34, 45, 0.96), rgba(15, 23, 32, 0.98));
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+            margin-bottom: 0.9rem;
         }
 
         .kpi-label {
@@ -220,11 +233,12 @@ def apply_theme() -> None:
 
         .kpi-value {
             color: var(--text-main);
-            font-size: 1.72rem;
+            font-size: 1.5rem;
             line-height: 1.1;
             font-weight: 850;
             margin-bottom: 0.4rem;
-            overflow-wrap: anywhere;
+            overflow-wrap: normal;
+            word-break: normal;
         }
 
         .kpi-caption {
@@ -356,6 +370,10 @@ def apply_theme() -> None:
             border-radius: 0.9rem;
             padding: 0.9rem;
             background: rgba(15, 23, 42, 0.42);
+            min-height: 180px;
+            height: 100%;
+            box-sizing: border-box;
+            margin-bottom: 0.75rem;
         }
 
         .pipeline-number {
@@ -513,7 +531,7 @@ def render_sidebar(meta: dict) -> str:
     labels = [label for label, _ in NAV_ITEMS]
     icons = [icon for _, icon in NAV_ITEMS]
     with st.sidebar:
-        st.markdown(
+        _render_html(
             """
             <div class="sidebar-brand">
                 <div class="sidebar-kicker">Dashboard Akademik</div>
@@ -521,8 +539,7 @@ def render_sidebar(meta: dict) -> str:
                 <div class="sidebar-subtitle">Produktivitas, produksi, evaluasi temporal, dan simulasi model.</div>
             </div>
             <div class="sidebar-separator"></div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
         selected = option_menu(
             menu_title=None,
@@ -549,7 +566,7 @@ def render_sidebar(meta: dict) -> str:
                 },
             },
         )
-        st.markdown(
+        _render_html(
             f"""
             <div class="sidebar-separator"></div>
             <div class="sidebar-note">
@@ -559,83 +576,81 @@ def render_sidebar(meta: dict) -> str:
                 <strong>{escape(str(meta.get("tahun_min", 2019)))}-{escape(str(meta.get("tahun_max", 2024)))}</strong>
             </div>
             <div class="sidebar-footer">Project Big Data | Prediksi Padi Lampung</div>
-            """,
-            unsafe_allow_html=True,
+            """
         )
     return selected
 
 
 def hero(title: str, subtitle: str, badge: str = "BIG DATA ANALYTICS &bull; LAMPUNG") -> None:
-    st.markdown(
+    _render_html(
         f"""
         <div class="app-hero">
             <div class="hero-badge">{badge}</div>
             <h1>{escape(title)}</h1>
             <p>{escape(subtitle)}</p>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 def page_heading(eyebrow: str, title: str, subtitle: str) -> None:
-    st.markdown(
+    _render_html(
         f"""
         <div class="page-heading">
             <div class="eyebrow">{escape(eyebrow)}</div>
             <h1>{escape(title)}</h1>
             <p>{escape(subtitle)}</p>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 def metric_cards(items: Iterable[tuple[str, str, str]]) -> None:
-    cards = []
-    for label, value, caption in items:
-        cards.append(
-            f"""
-            <div class="kpi-card">
-                <div class="kpi-label">{escape(label)}</div>
-                <div class="kpi-value">{escape(value)}</div>
-                <div class="kpi-caption">{escape(caption)}</div>
-            </div>
-            """
-        )
-    st.markdown(f"<div class='kpi-grid'>{''.join(cards)}</div>", unsafe_allow_html=True)
+    items = list(items)
+    row_size = 3 if len(items) > 4 else len(items)
+    for row_start in range(0, len(items), row_size):
+        row = items[row_start : row_start + row_size]
+        columns = st.columns(len(row), gap="small")
+        for column, (label, value, caption) in zip(columns, row):
+            _render_html(
+                f"""
+                <div class="kpi-card">
+                    <div class="kpi-label">{escape(label)}</div>
+                    <div class="kpi-value">{escape(value)}</div>
+                    <div class="kpi-caption">{escape(caption)}</div>
+                </div>
+                """,
+                container=column,
+            )
 
 
 def section_title(title: str, subtitle: str | None = None, level: int = 3) -> None:
     tag = "h2" if level == 2 else "h3"
     subtitle_html = f"<p>{escape(subtitle)}</p>" if subtitle else ""
-    st.markdown(
+    _render_html(
         f"""
         <div class="section-title">
             <{tag}>{escape(title)}</{tag}>
             {subtitle_html}
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 def callout(title: str, body: str, tone: str = "info") -> None:
-    st.markdown(
+    _render_html(
         f"""
         <div class="callout {escape(tone)}">
             <div class="callout-title">{escape(title)}</div>
             <div class="callout-body">{body}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 def insight_cards(items: Iterable[tuple[str, str]]) -> None:
-    cards = []
     for label, body in items:
-        cards.append(
+        _render_html(
             f"""
             <div class="insight-card">
                 <div class="label">{escape(label)}</div>
@@ -643,37 +658,38 @@ def insight_cards(items: Iterable[tuple[str, str]]) -> None:
             </div>
             """
         )
-    st.markdown(f"<div class='insight-grid'>{''.join(cards)}</div>", unsafe_allow_html=True)
 
 
 def result_card(label: str, value: str, caption: str) -> None:
-    st.markdown(
+    _render_html(
         f"""
         <div class="result-card">
             <div class="result-label">{escape(label)}</div>
             <div class="result-value">{escape(value)}</div>
             <div class="result-caption">{escape(caption)}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
 
 
 def tag_row(tags: Iterable[str]) -> None:
     tags_html = "".join(f"<span class='tag'>{escape(tag)}</span>" for tag in tags)
-    st.markdown(f"<div class='tag-row'>{tags_html}</div>", unsafe_allow_html=True)
+    _render_html(f"<div class='tag-row'>{tags_html}</div>")
 
 
 def pipeline(steps: Iterable[tuple[str, str]]) -> None:
-    cards = []
-    for idx, (title, body) in enumerate(steps, start=1):
-        cards.append(
-            f"""
-            <div class="pipeline-step">
-                <div class="pipeline-number">{idx}</div>
-                <div class="pipeline-title">{escape(title)}</div>
-                <div class="pipeline-body">{escape(body)}</div>
-            </div>
-            """
-        )
-    st.markdown(f"<div class='pipeline'>{''.join(cards)}</div>", unsafe_allow_html=True)
+    steps = list(steps)
+    for row_start in range(0, len(steps), 4):
+        row = steps[row_start : row_start + 4]
+        columns = st.columns(4, gap="small")
+        for idx, (column, (title, body)) in enumerate(zip(columns, row), start=row_start + 1):
+            _render_html(
+                f"""
+                <div class="pipeline-step">
+                    <div class="pipeline-number">{idx}</div>
+                    <div class="pipeline-title">{escape(title)}</div>
+                    <div class="pipeline-body">{escape(body)}</div>
+                </div>
+                """,
+                container=column,
+            )

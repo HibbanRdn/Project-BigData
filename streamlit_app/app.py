@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import importlib
+
 import pandas as pd
 import streamlit as st
 
@@ -9,6 +11,21 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+from utils import data_loader as _data_loader
+
+
+# Streamlit Cloud can rerun app.py after a pull while keeping an older imported
+# helper module in memory. Reload only when the weather-loader API is incomplete.
+_REQUIRED_WEATHER_LOADER_API = {
+    "load_weather_model",
+    "load_weather_model_metadata",
+    "load_weather_model_metrics",
+    "load_weather_model_wfv_folds",
+    "load_weather_reference_values",
+}
+if not _REQUIRED_WEATHER_LOADER_API.issubset(vars(_data_loader)):
+    importlib.reload(_data_loader)
 
 from utils.data_loader import (
     load_ablation_results,
